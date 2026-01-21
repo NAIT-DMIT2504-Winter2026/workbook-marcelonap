@@ -1,7 +1,7 @@
 class Weather {
-  late double temp;
-  late double elevation;
-  late double windspeed;
+  late double _temp;
+  late double _elevation;
+  late double _windspeed;
 
   // Weather(temp, elevation, windspeed) {
   //   _elevation = elevation;
@@ -11,11 +11,14 @@ class Weather {
 
   //or
   //Weather(this.elevation, this.temp, this.windspeed);
+  // Generative named cosntructor
   Weather({
-    required this.elevation,
-    required this.temp,
-    required this.windspeed,
-  });
+    required double elevation,
+    required double temp,
+    required double windspeed,
+  }) : _elevation = elevation,
+       _temp = temp,
+       _windspeed = windspeed;
 
   factory Weather.fromJson(dynamic json) {
     return Weather(
@@ -25,8 +28,16 @@ class Weather {
     );
   }
 
+  double get temp => _temp;
+  set temp(double newValue) {
+    if (newValue < -50.0) {
+      throw Exception("That tempereature is impossible");
+    }
+    _temp = newValue;
+  }
+
   @override
   String toString() {
-    return "Today it is $temp degrees, at $elevation meters, with wind blowing at $windspeed km/h";
+    return "Today it is $_temp degrees, at $_elevation meters, with wind blowing at $_windspeed km/h";
   }
 }
