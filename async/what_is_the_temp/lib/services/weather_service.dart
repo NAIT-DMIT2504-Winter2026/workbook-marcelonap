@@ -6,7 +6,7 @@ var url = Uri.parse(
   "https://api.open-meteo.com/v1/forecast?latitude=53.54&longitude=-113.49&current_weather=true",
 );
 
-Future<Weather?> fetchWeather() async {
+Future<dynamic> fetchWeather() async {
   var response = await http.get(url);
 
   if (response.statusCode != 200) {
@@ -16,7 +16,5 @@ Future<Weather?> fetchWeather() async {
 
   var json = jsonDecode(response.body);
 
-  Weather todaysWeather = Weather.fromJson(json);
-
-  return todaysWeather;
+  return json;
 }

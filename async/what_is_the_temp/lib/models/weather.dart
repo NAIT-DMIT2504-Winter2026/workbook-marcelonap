@@ -8,9 +8,11 @@ class Weather {
     required double elevation,
     required double temp,
     required double windspeed,
-  }) : _elevation = elevation,
-       _temp = temp,
-       _windspeed = windspeed;
+  }) {
+    this.elevation = elevation;
+    this.temp = temp;
+    this.windspeed = windspeed;
+  }
 
   factory Weather.fromJson(dynamic json) {
     return Weather(
@@ -22,17 +24,11 @@ class Weather {
 
   double get temp => _temp;
   set temp(double newValue) {
-    if (newValue < -50.0) {
-      throw Exception("That tempereature is impossible");
-    }
     _temp = newValue;
   }
 
   double get elevation => _elevation;
   set elevation(double newValue) {
-    if (elevation < -430.0) {
-      throw Exception("That elevation is impossible");
-    }
     _elevation = newValue;
   }
 
