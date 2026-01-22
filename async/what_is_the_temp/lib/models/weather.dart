@@ -3,14 +3,6 @@ class Weather {
   late double _elevation;
   late double _windspeed;
 
-  // Weather(temp, elevation, windspeed) {
-  //   _elevation = elevation;
-  //   _temp = temp;
-  //   _windspeed = windspeed;
-  // }
-
-  //or
-  //Weather(this.elevation, this.temp, this.windspeed);
   // Generative named cosntructor
   Weather({
     required double elevation,
@@ -34,6 +26,22 @@ class Weather {
       throw Exception("That tempereature is impossible");
     }
     _temp = newValue;
+  }
+
+  double get elevation => _elevation;
+  set elevation(double newValue) {
+    if (elevation < -430.0) {
+      throw Exception("That elevation is impossible");
+    }
+    _elevation = newValue;
+  }
+
+  double get windspeed => _windspeed;
+  set windspeed(double newValue) {
+    if (newValue < 0.0) {
+      throw Exception("That windspeed is impossible");
+    }
+    _windspeed = newValue;
   }
 
   @override
