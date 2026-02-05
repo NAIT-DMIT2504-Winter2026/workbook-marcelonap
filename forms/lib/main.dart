@@ -62,6 +62,11 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  int _intHolder = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,6 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Column(
                 children: <Widget>[
                   TextFormField(
+                    controller: _usernameController,
                     decoration: InputDecoration(label: Text("Useranme")),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -88,6 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     },
                   ),
                   TextFormField(
+                    controller: _passwordController,
                     obscureText: true,
                     decoration: InputDecoration(label: Text("Password")),
                     validator: (value) {
@@ -100,9 +107,49 @@ class _MyHomePageState extends State<MyHomePage> {
                       return null;
                     },
                   ),
+                  //Custom Form Input example, Allowing us to use whatever widgets we want
+                  //to take in different types of input, needs to be fully managed by us, unlinke
+                  // the other form field widgets which support the use of controllers
+                  FormField<int>(
+                    initialValue: _intHolder,
+                    builder: (state) {
+                      return Column(
+                        children: <Widget>[
+                          GestureDetector(
+                            onTap: () {
+                              state.didChange(200);
+                              _intHolder = 200;
+                            },
+                            child: Text("Set value to 200"),
+                          ),
+                          if (state.hasError)
+                            Text(
+                              style: TextStyle(color: Colors.red),
+                              state.errorText!,
+                            ),
+                        ],
+                      );
+                    },
+                    validator: (value) {
+                      if (value == null || value < 200) {
+                        print("Value not changed to 200");
+                        return "Value was not changed yet";
+                      }
+                      return null;
+                    },
+                  ),
                   TextButton(
                     onPressed: () {
-                      _formKey.currentState!.validate();
+                      if (_formKey.currentState!.validate()) {
+                        print(
+                          "Succesful login with: ${_usernameController.text} and ${_passwordController.text} int: $_intHolder",
+                        );
+                      } else {
+                        _usernameController.clear();
+                        _passwordController.clear();
+                        _intHolder = 0;
+                        _usernameController.text = "Validation failed";
+                      }
                     },
                     child: Text("Submit"),
                   ),
