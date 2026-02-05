@@ -27,7 +27,7 @@ class _GestureTesterState extends State<GestureTester> {
     return Center(
       child: Row(
         children: <Widget>[
-          Text(widget.title ?? "No title given"),
+          Text(widget.title),
           GestureDetector(
             onLongPress: () {
               print("Creed was long pressed");

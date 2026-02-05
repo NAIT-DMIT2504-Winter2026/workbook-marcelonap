@@ -8,6 +8,11 @@ class OfficePicker extends StatefulWidget {
 class _OfficePickerState extends State<OfficePicker> {
   String imageUrl = "lib/assets/images/creed_bratton.jpeg";
 
+  @override
+  void initState() {
+    super.initState();
+  }
+
   void _changePicture(String character) {
     setState(() {
       switch (character) {

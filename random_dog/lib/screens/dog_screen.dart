@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'draggable_widget.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -11,6 +12,7 @@ class _RandomDogShowcaseState extends State<RandomDogShowcase> {
   String dogUrl = '';
   bool isLoading = false;
   String caption = "Waiting to implement caption logic";
+
   @override
   void initState() {
     super.initState();
@@ -63,33 +65,61 @@ class _RandomDogShowcaseState extends State<RandomDogShowcase> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        children: <Widget>[
-          if (isLoading)
-            const CircularProgressIndicator()
-          else if (dogUrl.isNotEmpty)
-            Column(
-              children: <Widget>[
-                Image.network(dogUrl),
-                Text(
-                  caption,
-                  style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
+    return SingleChildScrollView(
+      child: Center(
+        child: Column(
+          children: <Widget>[
+            DraggableBox(),
+            if (isLoading)
+              const CircularProgressIndicator()
+            else if (dogUrl.isNotEmpty)
+              GestureDetector(
+                onTap: () {
+                  print("Dog image tapped");
+                },
+                onDoubleTap: () {
+                  print("Dog image double tapped");
+                },
+                onLongPress: () {
+                  print("Dog image long pressed");
+                },
+                child: Column(
+                  children: <Widget>[
+                    Image.network(
+                      width: 200,
+                      height: 200,
+                      fit: BoxFit.fill,
+                      dogUrl,
+                    ),
+                    Text(
+                      caption,
+                      style: TextStyle(
+                        fontSize: 30.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            )
-          else
-            const Text(
-              "Unable to fetch dog image, check your network connection",
+              )
+            else
+              const Text(
+                "Unable to fetch dog image, check your network connection",
+              ),
+            TextButton(
+              onPressed: () {
+                _fetchRandomDog();
+              },
+              child: const Text("Get New Dog"),
             ),
-          TextButton(
-            onPressed: () {
-              _fetchRandomDog();
-            },
-            child: const Text("Get New Dog"),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
