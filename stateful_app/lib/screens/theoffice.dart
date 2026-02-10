@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stateful_app/cosnt/asset_manager.dart';
 
 class OfficePicker extends StatefulWidget {
   @override
@@ -7,6 +8,14 @@ class OfficePicker extends StatefulWidget {
 
 class _OfficePickerState extends State<OfficePicker> {
   String imageUrl = "lib/assets/images/creed_bratton.jpeg";
+  final _fieldController = TextEditingController();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _fieldController.dispose();
+  }
 
   @override
   void initState() {
@@ -15,19 +24,7 @@ class _OfficePickerState extends State<OfficePicker> {
 
   void _changePicture(String character) {
     setState(() {
-      switch (character) {
-        case "jim":
-          imageUrl = "lib/assets/images/jim_halpert.jpeg";
-          break;
-        case "creed":
-          imageUrl = "lib/assets/images/creed_bratton.jpeg";
-          break;
-        case "michael":
-          imageUrl = "lib/assets/images/michael_scott.jpeg";
-          break;
-        default:
-          break;
-      }
+      imageUrl = Assets.getAsset(character);
     });
   }
 
@@ -61,6 +58,16 @@ class _OfficePickerState extends State<OfficePicker> {
                 child: const Text("Creed"),
               ),
             ],
+          ),
+          TextField(
+            controller: _fieldController,
+            decoration: InputDecoration(label: Text("Who do you want to see?")),
+          ),
+          TextButton(
+            onPressed: () {
+              _changePicture(_fieldController.text);
+            },
+            child: Text("Submit"),
           ),
         ],
       ),
