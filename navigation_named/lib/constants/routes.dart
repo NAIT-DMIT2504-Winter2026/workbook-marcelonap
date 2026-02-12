@@ -20,5 +20,6 @@ class AppRouter {
         builder: (context) => Screen1(title: "Screen 1 built centrally"),
       );
     }
+    return null;
   }
 }

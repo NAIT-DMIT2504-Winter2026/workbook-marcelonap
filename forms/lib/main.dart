@@ -107,6 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       return null;
                     },
                   ),
+                  TextFormField(keyboardType: TextInputType.number),
                   //Custom Form Input example, Allowing us to use whatever widgets we want
                   //to take in different types of input, needs to be fully managed by us, unlinke
                   // the other form field widgets which support the use of controllers

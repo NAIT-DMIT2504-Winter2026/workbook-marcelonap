@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stateless_app/theme/theme.dart';
+import 'page2.dart';
+import 'constants/routes.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,6 +21,7 @@ class MyApp extends StatelessWidget {
       darkTheme: materialTheme.dark(),
       themeMode: ThemeMode.system,
       home: const MyHomePage(),
+      onGenerateRoute: AppRouter.onGenerateRoute,
     );
   }
 }
@@ -40,6 +43,19 @@ class MyHomePage extends StatelessWidget {
                 Center(
                   child: Column(
                     children: [
+                      TextButton(
+                        onPressed: () async {
+                          final returnValue = await Navigator.of(
+                            context,
+                          ).pushNamed(AppRouter.page2, arguments: "TestName");
+                          if (returnValue != null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("Returned: $returnValue")),
+                            );
+                          }
+                        },
+                        child: const Text("Navigate to Page 2"),
+                      ),
                       Text(
                         "Employee Profile",
                         style: Theme.of(context).textTheme.displayLarge,
@@ -158,7 +174,17 @@ class ThemeShowcase extends StatelessWidget {
           const SizedBox(height: 16),
 
           // BUTTON
-          ElevatedButton(onPressed: () {}, child: const Text('Primary Button')),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) =>
+                      Page2(name: "Title from ThemeShowcaseWidget"),
+                ),
+              );
+            },
+            child: const Text('Primary Button'),
+          ),
         ],
       ),
     );

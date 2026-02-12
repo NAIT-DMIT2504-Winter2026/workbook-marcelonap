@@ -13,7 +13,6 @@ class _Screen2State extends State<Screen2> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _dataController.dispose();
   }
