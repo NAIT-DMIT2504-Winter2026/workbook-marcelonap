@@ -3,6 +3,7 @@ import 'package:cloud_auth/firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/material.dart';
 
 class AppState extends ChangeNotifier {
@@ -20,7 +21,13 @@ class AppState extends ChangeNotifier {
       options: DefaultFirebaseOptions.currentPlatform,
     );
 
-    FirebaseUIAuth.configureProviders([EmailAuthProvider()]);
+    FirebaseUIAuth.configureProviders([
+      EmailAuthProvider(),
+      GoogleProvider(
+        clientId:
+            "1088854800231-kjsdakoui4294p65kb1i7gah9as6kvco.apps.googleusercontent.com",
+      ),
+    ]);
 
     subscribeToUserChanges();
   }

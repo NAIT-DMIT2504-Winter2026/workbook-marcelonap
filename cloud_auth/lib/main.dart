@@ -25,6 +25,9 @@ class MyApp extends StatelessWidget {
               print(
                 "@authStateChangedActionCallback: state was changed, new state: $state",
               );
+              if (state is AuthFailed) {
+                print("REASON FOR FAILING: ${state.exception}");
+              }
               final user = switch (state) {
                 SignedIn signedInState => signedInState.user,
                 UserCreated createdState => createdState.credential.user,
