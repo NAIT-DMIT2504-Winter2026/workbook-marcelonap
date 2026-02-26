@@ -35,10 +35,24 @@ class MyApp extends StatelessWidget {
               if (state is UserCreated) {
                 user.updateDisplayName(user.email!.split('@').first);
               }
+
+              Navigator.of(context).pop();
+              Navigator.of(context).pushReplacementNamed("/");
             }),
           ],
         ),
-        '/profile': (context) => ProfileScreen(),
+        '/profile': (context) => ProfileScreen(
+          actions: [
+            SignedOutAction((context) {
+              print("@signedOutAction: Signing out received");
+              Navigator.of(context).pop();
+              Navigator.of(context).pushReplacementNamed("/");
+            }),
+            // AuthStateChangeAction((context, state) {
+            //   print("@Profile.authStateChanged: new State: $state");
+            // }),
+          ],
+        ),
       },
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
