@@ -31,7 +31,8 @@ class MyApp extends StatelessWidget {
         if (settings.name == fileScreenRoute) {
           final fileName = settings.arguments as String;
           return MaterialPageRoute(
-            builder: (_) => FileScreen(fileName: fileName),
+            builder: (_) =>
+                FileScreen(fileName: fileName, fileManager: fileManager),
           );
         }
       },

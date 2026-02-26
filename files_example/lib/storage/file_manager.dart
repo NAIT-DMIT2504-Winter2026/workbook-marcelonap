@@ -25,7 +25,7 @@ class FileManager {
 
   Future<bool> writeToFile(File file, String content) async {
     try {
-      await file.writeAsString(content);
+      await file.writeAsString(content, flush: true);
       return true;
     } catch (e) {
       print(
@@ -33,6 +33,11 @@ class FileManager {
       );
       return false;
     }
+  }
+
+  Future<bool> writeToFileFromFileName(String fileName, String content) async {
+    final file = await getFile(fileName);
+    return writeToFile(file, content);
   }
 
   Future<List<String>> readFileLines(File file) async {
@@ -45,6 +50,11 @@ class FileManager {
       );
       return [];
     }
+  }
+
+  Future<List<String>> readFileLinesFromName(String fileName) async {
+    final file = await getFile(fileName);
+    return readFileLines(file);
   }
 
   Future<List<String>> listAppDirectory() async {

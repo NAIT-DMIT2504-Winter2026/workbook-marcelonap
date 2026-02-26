@@ -1,0 +1,50 @@
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_setup_in_class_demo/firebase_options.dart';
+// I hide email auth provider to prevent import collisions between this and
+// firebase ui auth above
+import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
+
+// By extending change notifier I make this class listenable
+// Other classes can listen for changes and respond to them
+class ApplicationState extends ChangeNotifier {
+  // This class's job is to broadcast changes in firebase to the rest of the app
+  ApplicationState() {
+    // Call the init function to connect to firebase and setup listeners
+    init();
+  }
+
+  // Boolean tracks whether or not a user is logged in
+  bool _loggedIn = false;
+  bool get loggedIn => _loggedIn;
+
+  // Connects the app state to firebase auth and initializes
+  // firebase connection to the app itself
+  Future<void> init() async {
+    // Connect to firebase before starting the app
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+
+    // Configure auth providers, telling firebase ui auth screens
+    // to show/work with email login
+    FirebaseUIAuth.configureProviders([EmailAuthProvider()]);
+
+    // Set up User Stream observability to react to changes in the firebase auth user
+    subscribeToUserChanges();
+  }
+
+  Future<void> subscribeToUserChanges() async {
+    // Whenever firebase auth user changes (user logs in or out)
+    // notify all my listeners of that change
+    FirebaseAuth.instance.userChanges().listen((user) {
+      if (user == null) {
+        _loggedIn = false;
+      } else {
+        _loggedIn = true;
+      }
+      notifyListeners();
+    });
+  }
+}
