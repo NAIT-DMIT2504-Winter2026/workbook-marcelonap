@@ -1,3 +1,4 @@
+import 'package:firebase_setup_in_class_demo/screens/home_page.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -55,41 +56,6 @@ class MyApp extends StatelessWidget {
       },
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-    );
-  }
-}
-
-class HomePage extends StatelessWidget {
-  const HomePage({required this.appState, super.key});
-
-  // reference to the application state (with the loggedIn info)
-  final ApplicationState appState;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        // Listenable Builders work by calling the builder function
-        // any time the listenable changes
-        child: ListenableBuilder(
-          listenable: appState,
-          builder: (context, _) {
-            return appState.loggedIn
-                ? ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pushNamed('/profile');
-                    },
-                    child: Text('Profile'),
-                  )
-                : ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pushNamed('/sign-in');
-                    },
-                    child: Text('Sign In'),
-                  );
-          },
-        ),
       ),
     );
   }
