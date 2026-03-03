@@ -1,4 +1,5 @@
 import 'package:firebase_setup_in_class_demo/screens/home_page.dart';
+import 'package:firebase_setup_in_class_demo/screens/todo_list.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       routes: {
         '/': (context) => HomePage(appState: appState),
+        '/todo-list': (context) => TodoList(appState: appState),
         '/sign-in': (context) => SignInScreen(
           actions: [
             AuthStateChangeAction((ontext, state) {

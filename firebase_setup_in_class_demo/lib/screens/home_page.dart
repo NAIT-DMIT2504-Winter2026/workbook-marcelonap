@@ -23,15 +23,12 @@ class HomePage extends StatelessWidget {
             return appState.loggedIn
                 ? Column(
                     children: <Widget>[
-                      TextField(controller: fieldController),
+                      Spacer(),
                       ElevatedButton(
                         onPressed: () {
-                          appState.addTodo(
-                            Todo(description: fieldController.text),
-                          );
-                          fieldController.clear();
+                          Navigator.pushNamed(context, '/todo-list');
                         },
-                        child: Text('Add todo'),
+                        child: Text("Todo List"),
                       ),
                       ElevatedButton(
                         onPressed: () {
@@ -39,6 +36,7 @@ class HomePage extends StatelessWidget {
                         },
                         child: Text('Profile'),
                       ),
+                      Spacer(),
                     ],
                   )
                 : ElevatedButton(

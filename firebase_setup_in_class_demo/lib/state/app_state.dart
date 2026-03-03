@@ -10,6 +10,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 // By extending change notifier I make this class listenable
 // Other classes can listen for changes and respond to them
+
+// This change notifier is currently handling 2 big jobs
+// 1: Holding UI state, pushing updates, recting to UI Events
+
+// 2: Communicating with Firestore and firebase Auth, doing
+// Database and authentication operations
 class ApplicationState extends ChangeNotifier {
   // This class's job is to broadcast changes in firebase to the rest of the app
   ApplicationState() {
@@ -45,16 +51,42 @@ class ApplicationState extends ChangeNotifier {
     FirebaseUIAuth.configureProviders([EmailAuthProvider()]);
 
     // Set up User Stream observability to react to changes in the firebase auth user
-    subscribeToUserChanges();
+    _subscribeToUserChanges();
+  }
+  // USER EVENT HANDLERS:
+
+  // Doing DB operations
+  // Notifying UI
+  // Public method, accesible by the UI
+  void onAdd(Todo newTodo) async {
+    await _addTodo(newTodo);
+    refreshTodoList();
   }
 
-  void _fetchTodos() {
+  void onDelete(Todo todoToDelete) async {
+    await _deleteTodo(todoToDelete);
+    refreshTodoList();
+  }
+
+  void onUpdate(Todo todoToUpdate) async {
+    //await _updateTodo(todoToUpdate); // YOU IMPLEMENT THIS AS AN EXERCISE
+    refreshTodoList();
+  }
+
+  void refreshTodoList() async {
+    await _fetchTodos();
+    notifyListeners();
+  }
+
+  // DATABASE OPERATIONS
+
+  Future<void> _fetchTodos() async {
     if (user == null) {
       print("@fetchTodos: No user to fetch from");
       return;
     }
 
-    FirebaseFirestore.instance
+    await FirebaseFirestore.instance
         .collection('todos/${user!.uid}/todos')
         .get()
         .then((todosSnapshot) {
@@ -66,13 +98,15 @@ class ApplicationState extends ChangeNotifier {
         });
   }
 
-  void addTodo(Todo newTodo) {
+  // Private method, not accesible by the UI, to do a real database Operation
+  Future<void> _addTodo(Todo newTodo) async {
     if (user == null) {
       print("@fetchTodos: No user to fetch from");
       return;
     }
 
-    FirebaseFirestore.instance
+    await FirebaseFirestore
+        .instance // Find a nicer way to access the firestore instance everytime you need it
         .collection('todos/${user!.uid}/todos')
         .doc()
         .set(newTodo.toMap())
@@ -81,7 +115,26 @@ class ApplicationState extends ChangeNotifier {
         });
   }
 
-  Future<void> subscribeToUserChanges() async {
+  Future<void> _deleteTodo(Todo todo) async {
+    if (user == null) {
+      print("@fetchTodos: No user to fetch from");
+      return;
+    }
+
+    await FirebaseFirestore.instance
+        .collection('todos/${user!.uid}/todos')
+        .doc(todo.id)
+        .delete()
+        .onError((e, _) {
+          print("@deleteTodo: Something went wrong deleting a todo: $e");
+        });
+  }
+
+  Future<void> _updateTodo(Todo todo) async {
+    // For you to implement
+  }
+
+  Future<void> _subscribeToUserChanges() async {
     // Whenever firebase auth user changes (user logs in or out)
     // notify all my listeners of that change
     FirebaseAuth.instance.userChanges().listen((user) {
