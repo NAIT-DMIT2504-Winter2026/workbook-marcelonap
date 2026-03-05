@@ -1,19 +1,17 @@
 import 'package:cloud_auth/state/app_state.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key, required this.appState});
-
-  final AppState appState;
+  HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
       body: Center(
-        child: ListenableBuilder(
-          listenable: appState,
-          builder: (context, _) {
+        child: Consumer<AppState>(
+          builder: (context, appState, _) {
             return appState.loggedIn
                 ? ElevatedButton(
                     onPressed: () {
@@ -29,6 +27,7 @@ class HomeScreen extends StatelessWidget {
                     child: Text("Sign-in"),
                   );
           },
+          child: Text("Loading..."),
         ),
       ),
     );

@@ -1,11 +1,11 @@
 import 'package:firebase_setup_in_class_demo/models/todo.dart';
 import 'package:firebase_setup_in_class_demo/state/app_state.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 class TodoList extends StatelessWidget {
-  TodoList({required this.appState, super.key});
+  TodoList({super.key});
 
-  final ApplicationState appState;
   final TextEditingController fieldController = TextEditingController();
 
   @override
@@ -13,13 +13,13 @@ class TodoList extends StatelessWidget {
     // TODO: implement build
     return Scaffold(
       body: Center(
-        child: Column(
-          children: <Widget>[
-            Spacer(),
-            ListenableBuilder(
-              listenable: appState,
-              builder: (context, _) {
-                return SizedBox(
+        child: Consumer<ApplicationState>(
+          builder: (context, appState, _) {
+            return Column(
+              children: <Widget>[
+                Spacer(),
+
+                SizedBox(
                   height: 300,
                   child: ListView.builder(
                     itemCount: appState.todoList.length,
@@ -43,27 +43,28 @@ class TodoList extends StatelessWidget {
                       );
                     },
                   ),
-                );
-              },
-            ),
-            Spacer(),
-            SizedBox(height: 60.0),
-            TextField(controller: fieldController),
-            ElevatedButton(
-              onPressed: () {
-                appState.onAdd(Todo(description: fieldController.text));
-                fieldController.clear();
-              },
-              child: Text('Add todo'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed('/profile');
-              },
-              child: Text('Profile'),
-            ),
-            Spacer(),
-          ],
+                ),
+
+                Spacer(),
+                SizedBox(height: 60.0),
+                TextField(controller: fieldController),
+                ElevatedButton(
+                  onPressed: () {
+                    appState.onAdd(Todo(description: fieldController.text));
+                    fieldController.clear();
+                  },
+                  child: Text('Add todo'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('/profile');
+                  },
+                  child: Text('Profile'),
+                ),
+                Spacer(),
+              ],
+            );
+          },
         ),
       ),
     );

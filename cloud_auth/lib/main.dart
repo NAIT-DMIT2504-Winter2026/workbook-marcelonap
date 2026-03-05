@@ -2,23 +2,25 @@ import 'package:cloud_auth/state/app_state.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_auth/screens/home_screen.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  AppState state = AppState();
-  runApp(MyApp(state: state));
+  runApp(
+    ChangeNotifierProvider(create: (context) => AppState(), child: MyApp()),
+  );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key, required this.state});
-  final AppState state;
+  const MyApp({super.key});
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       routes: {
-        '/': (context) => HomeScreen(appState: state),
+        '/': (context) => HomeScreen(),
         '/sign-in': (context) => SignInScreen(
           actions: [
             AuthStateChangeAction((context, state) {
