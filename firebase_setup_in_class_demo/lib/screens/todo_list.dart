@@ -14,11 +14,10 @@ class TodoList extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: Consumer<ApplicationState>(
-          builder: (context, appState, _) {
+          builder: (context, appState, child) {
             return Column(
               children: <Widget>[
                 Spacer(),
-
                 SizedBox(
                   height: 300,
                   child: ListView.builder(
@@ -55,16 +54,17 @@ class TodoList extends StatelessWidget {
                   },
                   child: Text('Add todo'),
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed('/profile');
-                  },
-                  child: Text('Profile'),
-                ),
+                ?child,
                 Spacer(),
               ],
             );
           },
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed('/profile');
+            },
+            child: Text('Profile'),
+          ),
         ),
       ),
     );
