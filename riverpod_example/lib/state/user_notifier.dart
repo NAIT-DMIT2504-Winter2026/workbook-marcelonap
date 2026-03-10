@@ -3,14 +3,34 @@ import 'package:riverpod_example/models/todo.dart';
 import 'package:riverpod_example/models/user.dart';
 import 'package:riverpod_example/repositories/todo_repository.dart';
 
+// This is our 'View Model' In the MVVM pattern
+// It needs to observe changes to the data in our repository
 class UserNotifier extends Notifier<UserState> {
   @override
   UserState build() {
     // TODO: implement build
-    ref.read(todoRepositoryProvider).init();
+    subscribeToTodoData();
     return UserState(
       user: User(firstName: "Test", lastName: "Riverpod"),
       todoList: List.empty(),
+      isLoggedIn: false,
+    );
+  }
+
+  void subscribeToTodoData() {
+    ref.listen(
+      todoRepositoryProvider.select((todoState) => todoState.todoList),
+      (oldList, newList) {
+        state = state.copyWith(todoList: newList);
+      },
+    );
+
+    ref.listen(
+      todoRepositoryProvider.select((todoState) => todoState.isLoggedIn),
+      (oldValue, newValue) {
+        print("Logged in state changed:  old: $oldValue new:$newValue");
+        state = state.copyWith(isLoggedIn: newValue);
+      },
     );
   }
 
@@ -29,13 +49,11 @@ class UserNotifier extends Notifier<UserState> {
   }
 
   void onDelete(Todo todoToDelete) async {
-    await ref.read(todoRepositoryProvider).onDelete(todoToDelete);
-    getUserTodos();
+    await ref.read(todoRepositoryProvider.notifier).onDelete(todoToDelete);
   }
 
   void onAdd(Todo newTodo) async {
-    await ref.read(todoRepositoryProvider).onAdd(newTodo);
-    getUserTodos();
+    await ref.read(todoRepositoryProvider.notifier).onAdd(newTodo);
   }
 }
 

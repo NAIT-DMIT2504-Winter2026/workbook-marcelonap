@@ -9,15 +9,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/todo.dart';
 import 'package:riverpod_example/firebase_options.dart';
 
-class TodoRepository {
-  bool _loggedIn = false;
-  bool get loggedIn => _loggedIn;
+//This is a layer of caching**
+// PSA: In this example, this repository, doubles as a DATA SOURCE
+class TodoRepository extends Notifier<TodoState> {
+  @override
+  TodoState build() {
+    // TODO: implement build
+    init();
+    return TodoState(isLoggedIn: false, todoList: List.empty());
+  }
 
+  // Needs more cleanup later
   User? _user;
   User? get user => _user;
-
-  List<Todo> _todoList = [];
-  List<Todo> get todoList => _todoList;
 
   // Connects the app state to firebase auth and initializes
   // firebase connection to the app itself
@@ -71,9 +75,12 @@ class TodoRepository {
         .get()
         .then((todosSnapshot) {
           // Convert items in here to actual TODOS
-          _todoList = todosSnapshot.docs
-              .map((e) => Todo.fromFirestore(e))
-              .toList();
+          state = state.copyWith(
+            todoList: todosSnapshot.docs
+                .map((e) => Todo.fromFirestore(e))
+                .toList(),
+          );
+
           print("@fetchTodos: Fetched ${todosSnapshot.docs.first.data()}");
         });
   }
@@ -120,16 +127,16 @@ class TodoRepository {
     FirebaseAuth.instance.userChanges().listen((user) {
       if (user == null) {
         _user = null;
-        _loggedIn = false;
+        state = state.copyWith(isLoggedIn: false);
       } else {
         _user = user;
-        _loggedIn = true;
+        state = state.copyWith(isLoggedIn: true);
         _fetchTodos();
       }
     });
   }
 }
 
-final todoRepositoryProvider = Provider<TodoRepository>(
-  (ref) => TodoRepository(),
+final todoRepositoryProvider = NotifierProvider<TodoRepository, TodoState>(
+  TodoRepository.new,
 );

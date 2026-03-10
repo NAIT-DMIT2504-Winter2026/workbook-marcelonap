@@ -14,15 +14,21 @@ class User {
 }
 
 class UserState {
-  const UserState({required this.user, required this.todoList});
+  const UserState({
+    required this.user,
+    required this.todoList,
+    required this.isLoggedIn,
+  });
 
   final User user;
   final List<Todo> todoList;
+  final bool isLoggedIn;
 
-  UserState copyWith({User? user, List<Todo>? todoList}) {
+  UserState copyWith({User? user, List<Todo>? todoList, bool? isLoggedIn}) {
     return UserState(
       user: user ?? this.user,
       todoList: todoList ?? this.todoList,
+      isLoggedIn: isLoggedIn ?? this.isLoggedIn,
     );
   }
 }

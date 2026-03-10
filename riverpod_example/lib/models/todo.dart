@@ -1,5 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+class TodoState {
+  const TodoState({required this.todoList, required this.isLoggedIn});
+
+  final bool isLoggedIn;
+  final List<Todo> todoList;
+
+  TodoState copyWith({List<Todo>? todoList, bool? isLoggedIn}) {
+    return TodoState(
+      isLoggedIn: isLoggedIn ?? this.isLoggedIn,
+      todoList: todoList ?? this.todoList,
+    );
+  }
+}
+
 class Todo {
   final String description;
   late bool isDone = false;
