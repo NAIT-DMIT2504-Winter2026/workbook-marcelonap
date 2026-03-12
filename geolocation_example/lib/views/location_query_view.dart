@@ -16,6 +16,18 @@ class LocationQueryView extends ConsumerWidget {
           children: [
             Text("Last Location: ${state.last.toString()} "),
             Text("Current Location: ${state.current.toString()} "),
+            SizedBox(height: 20.0),
+            Text(
+              "Live Location: ${state.live.toString()}",
+              style: TextStyle(
+                backgroundColor: Color.fromARGB(255, 0, 100, 255),
+                decoration: TextDecoration.underline,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              "${state.placemark?.locality} - ${state.placemark?.administrativeArea} - ${state.placemark?.country}",
+            ),
           ],
         ),
       ),
